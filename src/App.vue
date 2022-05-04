@@ -28,11 +28,8 @@
 </script>
 
 <template>
-<div id="appContainer">
   <h1>Vor6le</h1>
   <Board/>
-</div>
-  
 </template>
 
 <style>
@@ -43,9 +40,6 @@
     text-align: center;
     color: #2c3e50;
     
-  }
-  #appContainer{
-    outline: none;
   }
   body{
     background-color: #0d2236;
