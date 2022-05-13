@@ -6,11 +6,11 @@
 </template>
 
 <script setup lang="ts">
-    import  { useGameStore } from "../stores/game";
+    import  { useGameStore, ColoredLetter } from "../stores/game";
     import Tile from './Tile.vue';
     const game = useGameStore();
     const props = defineProps<{
-        guess: string,
+        guess: ColoredLetter[],
         rownum: number
     }>()
     const row = props.rownum;
