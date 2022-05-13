@@ -1,13 +1,5 @@
 <script setup lang="ts">  
   import Board from './components/Board.vue';  
-  import { provide, onMounted } from "vue";
-  
-  
-  onMounted(
-    ()=>{
-      document.onkeydown = processKey;
-    }
-  )
 </script>
 <script lang="ts">  
   function processKey(event: KeyboardEvent){

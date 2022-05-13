@@ -6,10 +6,16 @@
 </template>
 
 <script setup lang="ts">
+    import { onMounted } from "vue";
     import  { useGameStore } from "../stores/game";
     import Row from './Row.vue';
     const game = useGameStore();
     const guesses = game.$state.guesses;
+    onMounted(
+    ()=>{
+      document.onkeydown = game.processKey;
+    }
+  )
 </script>
 <script lang="ts">
     
