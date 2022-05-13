@@ -31,4 +31,10 @@
     .grey{
         background-color: rgb(35, 32, 32);
     }
+    .green{
+        background-color: rgb(6, 76, 17);
+    }
+    .yellow{
+        background-color: rgb(169, 151, 12);
+    }
 </style>

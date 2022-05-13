@@ -10,6 +10,22 @@ export interface ColoredLetter{
     color: Colors;
 }
 const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
+function getColors(answer: string, guess: ColoredLetter[]){
+    for(let i=0;i<wordLength;i++){
+        if(answer.includes(guess[i].letter)){
+            if(answer[i]==guess[i].letter){
+                guess[i].color=Colors.Green;
+            }
+            else{
+                guess[i].color=Colors.Yellow;
+                //ACTUAL RULE IS MORE COMPLEX. FIX LATER
+            }
+        }
+        else{
+            guess[i].color=Colors.Grey;
+        }
+    }
+}
 export const useGameStore = defineStore({
     id: 'game',
     state: ()=>({
@@ -40,11 +56,8 @@ export const useGameStore = defineStore({
                 }
             }          
         },
-        processGuess(){
-            this.guesses[this.row].forEach(
-                item=>item.color=Colors.Grey
-            );
-            console.log("TODO: process guess");
+        processGuess(){            
+            getColors(this.answer, this.guesses[this.row]);
         }
     }
 })
