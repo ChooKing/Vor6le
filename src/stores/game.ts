@@ -16,7 +16,7 @@ export const useGameStore = defineStore({
     }),
     actions:{
         processKey(event: KeyboardEvent){
-            if ((event.key.length ==1)&&(this.col<wordLength)){
+            if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                
                 let guess = this.guesses[this.row];            
                 this.guesses[this.row]=guess.substring(0, this.col)+event.key+" ".repeat(wordLength-this.col-1);
                 this.col+=1;
@@ -27,7 +27,17 @@ export const useGameStore = defineStore({
                     this.col -=1;
                 }
                 this.guesses[this.row]=guess.substring(0, this.col)+" ".repeat(wordLength-this.col);                
-            }            
+            }  
+            else if((event.key=="Enter")&&(this.col==wordLength)){
+                this.processGuess();
+                if(this.row<maxGuesses-1){
+                    this.row += 1;
+                    this.col=0;                    
+                }
+            }          
+        },
+        processGuess(){
+            console.log("TODO: process guess");
         }
     }
 })
