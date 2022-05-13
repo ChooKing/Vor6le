@@ -1,14 +1,25 @@
 <template>
     <div class="row">
-        <Tile v-for="el in settings.length" :id="el - 1" />
+        <Tile v-for="el, idx in guess" :key="'tile'+idx+''+rownum" :id="'tile'+idx+''+rownum" :letter="el" :row="rownum" :col="idx"/>
+        
     </div>
 </template>
 
 <script setup lang="ts">
-    import  { SettingsType } from "../types"
+    import  { useGameStore } from "../stores/game";
     import Tile from './Tile.vue';
-    import { inject } from 'vue';
-    const settings:SettingsType = inject('settings')!;    
+    const game = useGameStore();
+    const props = defineProps<{
+        guess: string,
+        rownum: number
+    }>()
+    const row = props.rownum;
+
+
+
+
+    /* If a correct letter is guessed twice and one instance is in the correct place, that one is green but the other is grey
+    If it guessed twice and both instances are in the wrong place, only the first instance is yellown */
 </script>
 
 <style scoped>

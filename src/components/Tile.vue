@@ -1,11 +1,15 @@
 <template>
     <div class="tile grey">
-        X
+        {{ letter.toUpperCase() }}
     </div>
 </template>
 
 <script setup lang="ts">
-
+    const props = defineProps<{
+        letter: string,
+        row:number,
+        col:number
+    }>()
 </script>
 
 <style scoped>
