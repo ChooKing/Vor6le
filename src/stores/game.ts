@@ -3,7 +3,7 @@ const maxGuesses = 8;
 const wordLength = 6;
 
 enum Colors{
-    Black, Grey, Yellow, Green
+    Black="black", Grey="grey", Yellow="yellow", Green="green"
 }
 export interface ColoredLetter{
     letter: string;
@@ -41,6 +41,9 @@ export const useGameStore = defineStore({
             }          
         },
         processGuess(){
+            this.guesses[this.row].forEach(
+                item=>item.color=Colors.Grey
+            );
             console.log("TODO: process guess");
         }
     }

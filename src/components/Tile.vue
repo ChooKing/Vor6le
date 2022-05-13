@@ -1,5 +1,5 @@
 <template>
-    <div class="tile grey">
+    <div :class="'tile '+letter.color">
         {{ letter.letter.toUpperCase() }}
     </div>
 </template>
@@ -24,6 +24,9 @@
         justify-content: center;
         color: white;
         font-size: 2em;
+    }
+    .black{
+        background-color: black;
     }
     .grey{
         background-color: rgb(35, 32, 32);
