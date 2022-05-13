@@ -16,22 +16,18 @@ export const useGameStore = defineStore({
     }),
     actions:{
         processKey(event: KeyboardEvent){
-            if (event.key.length ==1){
+            if ((event.key.length ==1)&&(this.col<wordLength)){
                 let guess = this.guesses[this.row];            
-                this.guesses[this.row]=guess.substring(0, this.col)+event.key+guess.substring(this.col+1);
-                if(this.col<wordLength-1){
-                    this.col+=1;
-                }
-            }
-            //FIX BACKSPACE
-            else if((event.key=="Backspace")&&(this.col >0)){
-                let guess = this.guesses[this.row];            
-                this.guesses[this.row]=guess.substring(0, this.col - 1)+" "+guess.substring(this.col);
+                this.guesses[this.row]=guess.substring(0, this.col)+event.key+" ".repeat(wordLength-this.col-1);
+                this.col+=1;
+            }            
+            else if(event.key=="Backspace"){
+                let guess = this.guesses[this.row];
                 if(this.col>0){
                     this.col -=1;
                 }
-            }
-            
+                this.guesses[this.row]=guess.substring(0, this.col)+" ".repeat(wordLength-this.col);                
+            }            
         }
     }
 })
