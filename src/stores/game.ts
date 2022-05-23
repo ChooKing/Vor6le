@@ -25,7 +25,7 @@ export const useGameStore = defineStore({
         col: 0,
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
-        guesses: emptyGuesses        
+        guesses: emptyGuesses
     }),
     actions:{
         setAnswer(word: string){
@@ -38,15 +38,13 @@ export const useGameStore = defineStore({
                     this.answerCounts[letter]++;
                 }
             });
-            console.log("AnswerCounts: ",this.answerCounts);
-
         },
         processKey(event: KeyboardEvent){
             if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
                 this.guesses[this.row][this.col].letter = event.key;
                 this.col+=1;
             }            
-            else if(event.key=="Backspace"){                
+            else if((event.key=="Backspace")&&(this.row<maxGuesses)){                
                 if(this.col>0){
                     this.col -=1;
                 }
@@ -54,7 +52,7 @@ export const useGameStore = defineStore({
             }  
             else if((event.key=="Enter")&&(this.col==wordLength)){
                 this.processGuess();
-                if(this.row<maxGuesses-1){
+                if(this.row<maxGuesses){
                     this.row += 1;
                     this.col=0;                    
                 }
