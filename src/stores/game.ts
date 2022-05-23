@@ -25,7 +25,8 @@ export const useGameStore = defineStore({
         col: 0,
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
-        guesses: emptyGuesses
+        guesses: emptyGuesses,
+        ended: false
     }),
     actions:{
         setAnswer(word: string){
@@ -108,6 +109,8 @@ export const useGameStore = defineStore({
         },
         processGuess(){            
             this.getColors(this.guesses[this.row]);
+            if(this.row>=this.maxGuesses-1) this.ended=true;
+            
         }
     }
 })

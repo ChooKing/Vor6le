@@ -1,14 +1,15 @@
 <template>
     <div id="board" >
+        <Finish v-if="game.ended"/>
         <Row v-for="el, ind in guesses" :id="ind" :guess="el" :rownum="ind"/>
-        
     </div>
 </template>
 
 <script setup lang="ts">
     import { onMounted } from "vue";
     import  { useGameStore } from "../stores/game";
-    import Row from './Row.vue';    
+    import Row from './Row.vue';  
+    import Finish from "./Finish.vue";  
     const game = useGameStore();
     game.setAnswer("secret");
     const guesses = game.$state.guesses;
