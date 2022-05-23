@@ -9,23 +9,13 @@ export interface ColoredLetter{
     letter: string;
     color: Colors;
 }
-const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
-function getColors(answer: string, guess: ColoredLetter[]){
-    for(let i=0;i<wordLength;i++){
-        if(answer.includes(guess[i].letter)){
-            if(answer[i]==guess[i].letter){
-                guess[i].color=Colors.Green;
-            }
-            else{
-                guess[i].color=Colors.Yellow;
-                //ACTUAL RULE IS MORE COMPLEX. FIX LATER
-            }
-        }
-        else{
-            guess[i].color=Colors.Grey;
-        }
-    }
+type LetterCounts = {[key: string]: number}
+interface GreenPositions{
+    letter: string;
+    position: number;
 }
+const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
+
 export const useGameStore = defineStore({
     id: 'game',
     state: ()=>({
@@ -33,10 +23,24 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
-        answer: "secret",
+        answer: [] as string[],
+        answerCounts: {} as LetterCounts,
         guesses: emptyGuesses        
     }),
     actions:{
+        setAnswer(word: string){
+            this.answer=word.split('');
+            this.answer.forEach((letter)=>{
+                if(!this.answerCounts[letter]){
+                    this.answerCounts[letter]=1;
+                }
+                else{
+                    this.answerCounts[letter]++;
+                }
+            });
+            console.log("AnswerCounts: ",this.answerCounts);
+
+        },
         processKey(event: KeyboardEvent){
             if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
                 this.guesses[this.row][this.col].letter = event.key;
@@ -56,8 +60,56 @@ export const useGameStore = defineStore({
                 }
             }          
         },
+        getColors(guess: ColoredLetter[]){            
+            const greenCounts: LetterCounts={};
+            const guessCounts: LetterCounts={};
+            const yellowCounts: LetterCounts={};
+            guess.forEach((item)=>{
+                if(!guessCounts[item.letter]){
+                    guessCounts[item.letter]=1;
+                }
+                else{
+                    guessCounts[item.letter]++;
+                }
+            });            
+            guess.forEach((el, idx)=>{
+                if(el.letter==this.answer[idx]){
+                    if(el.letter in greenCounts){
+                        greenCounts[el.letter]++;
+                    }
+                    else{
+                        greenCounts[el.letter]=1;                        
+                    } 
+                }
+                else{
+                    if(!greenCounts[el.letter]) greenCounts[el.letter]=0;
+                }
+            });            
+            guess.forEach((el, idx)=>{        
+                if(this.answer.includes(el.letter)){
+                    if(el.letter==this.answer[idx]){
+                        el.color=Colors.Green;                                                
+                    }
+                    else{
+                        if(!yellowCounts[el.letter]){
+                            yellowCounts[el.letter] = 0;
+                        }
+                        if(yellowCounts[el.letter]+greenCounts[el.letter]<this.answerCounts[el.letter]){
+                            el.color=Colors.Yellow;
+                        } 
+                        else{
+                            el.color=Colors.Grey;
+                        }
+                        yellowCounts[el.letter]++;
+                    }            
+                }
+                else{
+                    el.color=Colors.Grey;
+                }
+            });    
+        },
         processGuess(){            
-            getColors(this.answer, this.guesses[this.row]);
+            this.getColors(this.guesses[this.row]);
         }
     }
 })

@@ -8,8 +8,9 @@
 <script setup lang="ts">
     import { onMounted } from "vue";
     import  { useGameStore } from "../stores/game";
-    import Row from './Row.vue';
+    import Row from './Row.vue';    
     const game = useGameStore();
+    game.setAnswer("secret");
     const guesses = game.$state.guesses;
     onMounted(
     ()=>{

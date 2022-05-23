@@ -18,8 +18,7 @@
 
 
 
-    /* If a correct letter is guessed twice and one instance is in the correct place, that one is green but the other is grey
-    If it guessed twice and both instances are in the wrong place, only the first instance is yellown */
+    
 </script>
 
 <style scoped>
