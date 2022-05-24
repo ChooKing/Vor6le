@@ -33,7 +33,7 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
-        alphabet: [] as ColoredLetter[],
+        alphabet: emptyAlphabet,
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
         guesses: emptyGuesses,
@@ -51,8 +51,14 @@ export const useGameStore = defineStore({
                     this.answerCounts[letter]++;
                 }
             });
-            this.alphabet = [...emptyAlphabet];
-            this.guesses=[...emptyGuesses];
+            for(let i=0;i<26;i++){
+                this.alphabet[i].color=Colors.Black;
+            }          
+            for(let i=0; i<maxGuesses;i++){
+                for(let j=0; j<wordLength; j++){
+                    this.guesses[i][j]={letter: " ", color: Colors.Black};
+                }
+            }
             console.log(this.alphabet);
         },
         reset(){
