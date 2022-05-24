@@ -58,8 +58,7 @@ export const useGameStore = defineStore({
                 for(let j=0; j<wordLength; j++){
                     this.guesses[i][j]={letter: " ", color: Colors.Black};
                 }
-            }
-            console.log(this.alphabet);
+            }            
         },
         reset(){
             this.setAnswer();

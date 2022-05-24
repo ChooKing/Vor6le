@@ -19,21 +19,24 @@
     .modal{
         position: absolute;
         z-index: 3;
-        height: 50vh;
+        height: 25vh;
         width: 25vw;
         margin: auto;
         padding: 0;
         font-size: 5em;
-        color:rgb(45, 165, 21);
-        background-color: rgba(11, 52, 88, 0.85);
+        color:rgb(158, 213, 148);
+        background-color: rgba(11, 52, 88, 0.5);
     }
     .modal button{
-        background-color: rgb(79, 129, 25);
+        background-color: rgba(79, 129, 25, 0.5);
         font-size: 4rem;
         cursor: pointer;
     }
+    h2{
+        margin: 10px;
+    }
     button:hover{
-        background-color: rgb(11, 80, 57);
+        background-color: rgba(11, 80, 57);
         color: yellow;
         
     }
