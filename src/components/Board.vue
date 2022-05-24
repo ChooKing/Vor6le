@@ -1,26 +1,16 @@
 <template>
     <div id="board" >
-        <Finish v-if="game.ended"/>
+        <Finish v-if="game.ending!=Endings.Playing"/>
         <Row v-for="el, ind in guesses" :id="ind" :guess="el" :rownum="ind"/>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { onMounted } from "vue";
-    import  { useGameStore } from "../stores/game";
+    import  { useGameStore, Endings } from "../stores/game";
     import Row from './Row.vue';  
     import Finish from "./Finish.vue";  
-    const game = useGameStore();
-    game.setAnswer("secret");
+    const game = useGameStore();    
     const guesses = game.$state.guesses;
-    onMounted(
-    ()=>{
-      document.onkeydown = game.processKey;
-    }
-  )
-</script>
-<script lang="ts">
-    
 </script>
 
 <style scoped>

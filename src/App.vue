@@ -1,11 +1,16 @@
 <script setup lang="ts">  
   import Board from './components/Board.vue';  
+  import  { useGameStore } from "./stores/game";
+  import { onMounted } from "vue";
+  const game = useGameStore();
+  game.setAnswer("runner");
+  const guesses = game.$state.guesses;
+  onMounted(
+  ()=>{
+    document.onkeydown = game.processKey;
+  });
 </script>
-<script lang="ts">  
-  function processKey(event: KeyboardEvent){
-        console.log(event.key);
-    }
-</script>
+
 
 <template>
   <h1>Vor6le</h1>

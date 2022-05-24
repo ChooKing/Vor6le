@@ -5,6 +5,9 @@ const wordLength = 6;
 enum Colors{
     Black="black", Grey="grey", Yellow="yellow", Green="green"
 }
+export enum Endings{
+    Win, Lose, Playing
+}
 export interface ColoredLetter{
     letter: string;
     color: Colors;
@@ -26,7 +29,7 @@ export const useGameStore = defineStore({
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
         guesses: emptyGuesses,
-        ended: false
+        ending: Endings.Playing
     }),
     actions:{
         setAnswer(word: string){
@@ -63,6 +66,8 @@ export const useGameStore = defineStore({
             const greenCounts: LetterCounts={};
             const guessCounts: LetterCounts={};
             const yellowCounts: LetterCounts={};
+            this.ending=Endings.Win;
+            
             guess.forEach((item)=>{
                 if(!guessCounts[item.letter]){
                     guessCounts[item.letter]=1;
@@ -81,6 +86,7 @@ export const useGameStore = defineStore({
                     } 
                 }
                 else{
+                    this.ending=Endings.Playing;
                     if(!greenCounts[el.letter]) greenCounts[el.letter]=0;
                 }
             });            
@@ -109,7 +115,7 @@ export const useGameStore = defineStore({
         },
         processGuess(){            
             this.getColors(this.guesses[this.row]);
-            if(this.row>=this.maxGuesses-1) this.ended=true;
+            if(this.row>=this.maxGuesses-1) this.ending=Endings.Lose;
             
         }
     }

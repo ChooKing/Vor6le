@@ -1,11 +1,13 @@
 <template>
     <div class="modal">
-        <h2>GAME ENDED</h2>
+        <h2 v-if="game.ending==Endings.Lose">YOU LOSE</h2>
+        <h2 v-if="game.ending==Endings.Win">YOU WIN</h2>
     </div>
 </template>
 
 <script setup lang="ts">
-
+    import { useGameStore, Endings } from '../stores/game';
+    const game = useGameStore();
 </script>
 
 <style scoped>
