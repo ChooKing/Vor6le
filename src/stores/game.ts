@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { wordList } from './finalwords';
 const maxGuesses = 8;
 const wordLength = 6;
 
@@ -19,6 +20,8 @@ interface GreenPositions{
 }
 const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
 
+const wordListLength = wordList.length;
+
 export const useGameStore = defineStore({
     id: 'game',
     state: ()=>({
@@ -32,8 +35,9 @@ export const useGameStore = defineStore({
         ending: Endings.Playing
     }),
     actions:{
-        setAnswer(word: string){
-            this.answer=word.split('');
+        setAnswer(){
+            let randIndex = Math.round(Math.random()*wordListLength);
+            this.answer = wordList[randIndex].split('');            
             this.answer.forEach((letter)=>{
                 if(!this.answerCounts[letter]){
                     this.answerCounts[letter]=1;

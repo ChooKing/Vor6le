@@ -3,7 +3,7 @@
   import  { useGameStore } from "./stores/game";
   import { onMounted } from "vue";
   const game = useGameStore();
-  game.setAnswer("runner");
+  game.setAnswer();
   const guesses = game.$state.guesses;
   onMounted(
   ()=>{
