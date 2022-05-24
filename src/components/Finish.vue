@@ -2,6 +2,7 @@
     <div class="modal">
         <h2 v-if="game.ending==Endings.Lose">YOU LOSE</h2>
         <h2 v-if="game.ending==Endings.Win">YOU WIN</h2>
+        <button @click="game.reset">Play Again</button>
     </div>
 </template>
 

@@ -47,6 +47,17 @@ export const useGameStore = defineStore({
                 }
             });
         },
+        reset(){
+            this.setAnswer();
+            this.row=0;
+            this.col=0;
+            for(let i=0; i<maxGuesses; i++){
+                for(let j=0; j<wordLength; j++){
+                    this.guesses[i][j]={letter: " ", color: Colors.Black};
+                }
+            }
+            this.ending=Endings.Playing;            
+        },
         processKey(event: KeyboardEvent){
             if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
                 this.guesses[this.row][this.col].letter = event.key;

@@ -1,13 +1,13 @@
 <template>
-    <div :class="'tile '+letter.color">
-        {{ letter.letter.toUpperCase() }}
+    <div :class="'tile '+game.guesses[row][col].color">
+        {{ game.guesses[row][col].letter.toUpperCase() }}
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ColoredLetter } from '../stores/game';
-    const props = defineProps<{
-        letter: ColoredLetter,
+    import { useGameStore, ColoredLetter } from '../stores/game';
+    const game = useGameStore();
+    const props = defineProps<{        
         row:number,
         col:number
     }>()
