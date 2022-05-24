@@ -19,6 +19,10 @@ interface GreenPositions{
     position: number;
 }
 const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
+const qwerty = "QWERTYUIOPASDFGHJKLZXCVBNM";
+const emptyAlphabet = qwerty.split('').map((el)=>({letter: el, color: Colors.Black}));
+
+
 
 const wordListLength = wordList.length;
 
@@ -29,6 +33,7 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
+        alphabet: [] as ColoredLetter[],
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
         guesses: emptyGuesses,
@@ -46,16 +51,14 @@ export const useGameStore = defineStore({
                     this.answerCounts[letter]++;
                 }
             });
+            this.alphabet = [...emptyAlphabet];
+            this.guesses=[...emptyGuesses];
+            console.log(this.alphabet);
         },
         reset(){
             this.setAnswer();
             this.row=0;
-            this.col=0;
-            for(let i=0; i<maxGuesses; i++){
-                for(let j=0; j<wordLength; j++){
-                    this.guesses[i][j]={letter: " ", color: Colors.Black};
-                }
-            }
+            this.col=0;            
             this.ending=Endings.Playing;            
         },
         processKey(event: KeyboardEvent){
@@ -76,6 +79,12 @@ export const useGameStore = defineStore({
                     this.col=0;                    
                 }
             }          
+        },
+        setKeyColor(letter: string, color: Colors){
+            let idx = qwerty.indexOf(letter.toUpperCase());
+            if(this.alphabet[idx].color!=Colors.Green){
+                this.alphabet[idx].color = color;
+            }            
         },
         getColors(guess: ColoredLetter[]){            
             const greenCounts: LetterCounts={};
@@ -99,6 +108,7 @@ export const useGameStore = defineStore({
                     else{
                         greenCounts[el.letter]=1;                        
                     } 
+                    this.setKeyColor(el.letter, Colors.Green);
                 }
                 else{
                     this.ending=Endings.Playing;
@@ -115,16 +125,19 @@ export const useGameStore = defineStore({
                             yellowCounts[el.letter] = 0;
                         }
                         if(yellowCounts[el.letter]+greenCounts[el.letter]<this.answerCounts[el.letter]){
+                            this.setKeyColor(el.letter, Colors.Yellow);
                             el.color=Colors.Yellow;
                         } 
                         else{
                             el.color=Colors.Grey;
+                            this.setKeyColor(el.letter, Colors.Grey);
                         }
                         yellowCounts[el.letter]++;
                     }            
                 }
                 else{
                     el.color=Colors.Grey;
+                    this.setKeyColor(el.letter, Colors.Grey);
                 }
             });    
         },

@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <Tile v-for="el, idx in game.guesses[rownum]" :key="'tile'+idx+''+rownum" :id="'tile'+idx+''+rownum" :letter="el" :row="rownum" :col="idx"/>
+        <Tile v-for="el, idx in game.guesses[rownum]" :key="'tile'+idx+''+rownum" :id="'tile'+idx+''+rownum" :row="rownum" :col="idx"/>
         
     </div>
 </template>

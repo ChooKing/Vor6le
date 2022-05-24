@@ -29,7 +29,7 @@
         background-color: black;
     }
     .grey{
-        background-color: rgb(35, 32, 32);
+        background-color: rgb(58, 57, 57);
     }
     .green{
         background-color: rgb(6, 76, 17);
