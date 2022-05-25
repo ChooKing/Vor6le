@@ -18,12 +18,7 @@ interface GreenPositions{
     letter: string;
     position: number;
 }
-const emptyGuesses = Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));
 const qwerty = "QWERTYUIOPASDFGHJKLZXCVBNM";
-const emptyAlphabet = qwerty.split('').map((el)=>({letter: el, color: Colors.Black}));
-
-
-
 const wordListLength = wordList.length;
 
 export const useGameStore = defineStore({
@@ -33,10 +28,10 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
-        alphabet: emptyAlphabet,
+        alphabet: [] as ColoredLetter[],
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
-        guesses: emptyGuesses,
+        guesses: [] as ColoredLetter[][],
         ending: Endings.Playing
     }),
     actions:{
@@ -51,14 +46,8 @@ export const useGameStore = defineStore({
                     this.answerCounts[letter]++;
                 }
             });
-            for(let i=0;i<26;i++){
-                this.alphabet[i].color=Colors.Black;
-            }          
-            for(let i=0; i<maxGuesses;i++){
-                for(let j=0; j<wordLength; j++){
-                    this.guesses[i][j]={letter: " ", color: Colors.Black};
-                }
-            }            
+            this.alphabet=qwerty.split('').map((el)=>({letter: el, color: Colors.Black}));            
+            this.guesses=Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));            
         },
         reset(){
             this.setAnswer();
