@@ -6,7 +6,7 @@ const wordLength = 6;
 enum Colors{
     Black="black", Grey="grey", Yellow="yellow", Green="green"
 }
-export enum Endings{
+export enum Statuses{
     Win, Lose, Playing
 }
 const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
@@ -36,7 +36,7 @@ export const useGameStore = defineStore({
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
         guesses: [] as ColoredLetter[][],
-        ending: Endings.Playing
+        status: Statuses.Playing
     }),
     actions:{
         setAnswer(){
@@ -57,7 +57,7 @@ export const useGameStore = defineStore({
             this.setAnswer();
             this.row=0;
             this.col=0;            
-            this.ending=Endings.Playing;            
+            this.status=Statuses.Playing;            
         },
         processKey(event: KeyboardEvent){
             if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
@@ -87,7 +87,7 @@ export const useGameStore = defineStore({
             const greenCounts: LetterCounts={};
             const guessCounts: LetterCounts={};
             const yellowCounts: LetterCounts={};
-            this.ending=Endings.Win;
+            this.status=Statuses.Win;
             
             guess.forEach((item)=>{
                 if(!guessCounts[item.letter]){
@@ -108,7 +108,7 @@ export const useGameStore = defineStore({
                     this.setKeyColor(el.letter, Colors.Green);
                 }
                 else{
-                    this.ending=Endings.Playing;
+                    this.status=Statuses.Playing;
                     if(!greenCounts[el.letter]) greenCounts[el.letter]=0;
                 }
             });            
@@ -140,7 +140,7 @@ export const useGameStore = defineStore({
         },
         processGuess(){
             this.getColors(this.guesses[this.row]);
-            if(this.row>=this.maxGuesses-1) this.ending=Endings.Lose;
+            if(this.row>=this.maxGuesses-1) this.status=Statuses.Lose;
             
         }
     }

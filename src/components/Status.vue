@@ -1,35 +1,28 @@
 <template>
-    <div class="modal">
-        <div id="close" @click="()=>{game.ending=Endings.Playing}">
-            X
-        </div>
-        <h2 v-if="game.ending==Endings.Lose">YOU LOSE</h2>
-        <h2 v-if="game.ending==Endings.Win">YOU WIN</h2>
-        <button @click="game.reset">Play Again</button>
+    <div class="modal">        
+        <span v-if="game.status==Statuses.Lose">Better luck next time. </span>
+        <span v-if="game.status==Statuses.Win">Congatulations! </span>
+        <button v-if="game.status==Statuses.Lose || game.status==Statuses.Win" @click="game.reset">Play Again</button>
     </div>
     
 </template>
 
 <script setup lang="ts">
-    import { useGameStore, Endings } from '../stores/game';
+    import { useGameStore, Statuses } from '../stores/game';
     const game = useGameStore();
 </script>
 
 <style scoped>
     .modal{
-        position: absolute;
-        z-index: 3;
-        height: 25vh;
-        width: 25vw;
+        
         margin: auto;
         padding: 0;
-        font-size: 5em;
-        color:rgb(158, 213, 148);
-        background-color: rgba(11, 52, 88, 0.5);
+        font-size: 2em;
+        color:rgb(158, 213, 148);        
     }
     .modal button{
         background-color: rgba(79, 129, 25, 0.5);
-        font-size: 4rem;
+        font-size: 2rem;
         cursor: pointer;
     }
     h2{

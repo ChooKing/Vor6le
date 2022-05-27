@@ -31,7 +31,7 @@
   }
   h1{
     color: white;
-    font-size: 6em;
+    font-size: 4em;
     margin: 0.25em 0;
   }
 </style>
