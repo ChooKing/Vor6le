@@ -24,8 +24,9 @@
 
 
 <template>
-  <h1>Vor6le</h1>
+  <h1>Worble</h1>
   <Board/>
+  <span>By <a href="https://github.com/ChooKing/Worble" target="blank">Choo King</a> based on Wordle&trade;</span>
 </template>
 
 <style>
