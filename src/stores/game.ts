@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { wordList } from './finalwords';
+import { allWords } from './allwords';
 const maxGuesses = 8;
 const wordLength = 6;
 
@@ -7,7 +8,7 @@ enum Colors{
     Black="black", Grey="grey", Yellow="yellow", Green="green"
 }
 export enum Statuses{
-    Win, Lose, Playing
+    Win, Lose, Playing, Invalid
 }
 const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
 type Letter = typeof qwerty[number] | ' ';
@@ -64,18 +65,15 @@ export const useGameStore = defineStore({
                 this.guesses[this.row][this.col].letter = event.key.toUpperCase() as Letter;
                 this.col+=1;
             }            
-            else if((event.key=="Backspace")&&(this.row<maxGuesses)){                
+            else if((event.key=="Backspace")&&(this.row<maxGuesses)){    
+                if(this.status==Statuses.Invalid) this.status=Statuses.Playing;            
                 if(this.col>0){
                     this.col -=1;
                 }
                 this.guesses[this.row][this.col].letter = " ";              
             }  
             else if((event.key=="Enter")&&(this.col==wordLength)){
-                this.processGuess();
-                if(this.row<maxGuesses){
-                    this.row += 1;
-                    this.col=0;                    
-                }
+                this.processGuess();                
             }          
         },
         setKeyColor(letter: Letter, color: Colors){                       
@@ -139,9 +137,18 @@ export const useGameStore = defineStore({
             });    
         },
         processGuess(){
-            this.getColors(this.guesses[this.row]);
-            if(this.row>=this.maxGuesses-1) this.status=Statuses.Lose;
-            
+            const possibleWord = this.guesses[this.row].reduce((acc, el)=>acc+el.letter, "").toLowerCase();            
+            if(allWords.includes(possibleWord)){                
+                this.getColors(this.guesses[this.row]);
+                if(this.row<maxGuesses){
+                    this.row += 1;
+                    this.col=0;                    
+                }
+                if(this.row>=this.maxGuesses-1) this.status=Statuses.Lose;                
+            }
+            else{
+                this.status = Statuses.Invalid;
+            }
         }
     }
 })

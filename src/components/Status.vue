@@ -2,6 +2,7 @@
     <div class="modal">        
         <span v-if="game.status==Statuses.Lose">Better luck next time. </span>
         <span v-if="game.status==Statuses.Win">Congatulations! </span>
+        <span v-if="game.status==Statuses.Invalid">Not in word list. </span>
         <button v-if="game.status==Statuses.Lose || game.status==Statuses.Win" @click="game.reset">Play Again</button>
     </div>
     
