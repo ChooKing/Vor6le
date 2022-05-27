@@ -7,7 +7,9 @@
             <button v-for="item in 9" @click="processButton" :class="game.alphabet[letters[item+9]]">{{letters[item+9]}}</button>            
         </div>
         <div>
-            <button v-for="item in 7" @click="processButton" :class="game.alphabet[letters[item+18]]">{{letters[item+18]}}</button>            
+            <button @click="game.processEnter" class="black control" >ENTER</button>
+            <button v-for="item in 7" @click="processButton" :class="game.alphabet[letters[item+18]]">{{letters[item+18]}}</button>
+            <button @click="game.processBackspace" class="black control">&lAarr;</button>            
         </div>        
     </div>
 </template>
@@ -42,11 +44,17 @@
     .yellow{
         background-color: rgb(169, 151, 12);
     }
+    #alphabetContainer button.control{        
+        width: auto;
+    }
     @media only screen and (max-width: 800px){
         #alphabetContainer button{
             width: 8vw;
             margin: 0.25vw;
             font-size: 6vw;
-        }        
+        }  
+        .control{            
+            font-size: 6vw;
+        }      
     }
 </style>

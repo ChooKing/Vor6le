@@ -16,14 +16,14 @@
 <style scoped>
     .tile{
         border: 1px solid rgb(170, 170, 180);
-        width: 4rem;
-        height: 4rem;
+        width: 5rem;
+        height: 5rem;
         margin: 0.2em;
         display: flex;
         align-items: center;        
         justify-content: center;
         color: white;
-        font-size: 2em;
+        font-size: 3em;
     }
     .black{
         background-color: black;
