@@ -1,14 +1,25 @@
 <script setup lang="ts">  
   import Board from './components/Board.vue';  
-  import  { useGameStore } from "./stores/game";
+  import  { useGameStore, Letter } from "./stores/game";
   import { onMounted } from "vue";
   const game = useGameStore();
   game.setAnswer();
   const guesses = game.$state.guesses;
   onMounted(
   ()=>{
-    document.onkeydown = game.processKey;
+    document.onkeydown = processKey;
   });
+  function processKey(event: KeyboardEvent){
+    if ((event.key.length ==1)&&(game.col<game.wordLength)&&/[a-zA-Z]/.test(event.key)){
+      game.processLetter(event.key.toUpperCase() as Letter);
+    }            
+    else if((event.key=="Backspace")&&(game.row<game.maxGuesses)){    
+        game.processBackspace();
+    }  
+    else if((event.key=="Enter")&&(game.col==game.wordLength)){
+        game.processEnter();
+    }          
+}
 </script>
 
 

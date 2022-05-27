@@ -11,7 +11,7 @@ export enum Statuses{
     Win, Lose, Playing, Invalid
 }
 const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
-type Letter = typeof qwerty[number] | ' ';
+export type Letter = typeof qwerty[number] | ' ';
 const emptyAlphabet = Object.fromEntries(qwerty.map(el=>[el, Colors.Black]));
 export interface ColoredLetter{
     letter: Letter;
@@ -59,20 +59,22 @@ export const useGameStore = defineStore({
             this.row=0;
             this.col=0;            
             this.status=Statuses.Playing;            
+        },        
+        processLetter(l: Letter){
+            this.guesses[this.row][this.col].letter = l;
+            this.col+=1;
         },
-        processKey(event: KeyboardEvent){
-            if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
-                this.guesses[this.row][this.col].letter = event.key.toUpperCase() as Letter;
-                this.col+=1;
-            }            
-            else if((event.key=="Backspace")&&(this.row<maxGuesses)){    
+        processBackspace(){
+            if (this.row<maxGuesses){    
                 if(this.status==Statuses.Invalid) this.status=Statuses.Playing;            
                 if(this.col>0){
                     this.col -=1;
                 }
                 this.guesses[this.row][this.col].letter = " ";              
             }  
-            else if((event.key=="Enter")&&(this.col==wordLength)){
+        },
+        processEnter(){
+            if (this.col==wordLength){
                 this.processGuess();                
             }          
         },
