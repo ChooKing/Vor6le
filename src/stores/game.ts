@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { wordList } from './finalwords';
 import { allWords } from './allwords';
-const maxGuesses = 8;
+const maxGuesses = 6;
 const wordLength = 6;
 
 enum Colors{
@@ -144,7 +144,7 @@ export const useGameStore = defineStore({
                     this.row += 1;
                     this.col=0;                    
                 }
-                if(this.row>=this.maxGuesses-1) this.status=Statuses.Lose;                
+                if(this.row>=this.maxGuesses) this.status=Statuses.Lose;                
             }
             else{
                 this.status = Statuses.Invalid;

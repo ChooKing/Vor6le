@@ -34,4 +34,7 @@
     font-size: 4em;
     margin: 0.25em 0;
   }
+  @media only screen and (max-width: 600px){
+    h1{font-size: 10vw;}
+  }
 </style>

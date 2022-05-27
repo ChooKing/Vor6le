@@ -16,8 +16,8 @@
 <style scoped>
     .tile{
         border: 1px solid rgb(170, 170, 180);
-        min-width: 4rem;
-        min-height: 4rem;
+        width: 4rem;
+        height: 4rem;
         margin: 0.2em;
         display: flex;
         align-items: center;        
@@ -36,5 +36,12 @@
     }
     .yellow{
         background-color: rgb(169, 151, 12);
+    }
+    @media only screen and (max-width: 600px){
+        .tile{
+            width: 12vw;
+            height: 12vw;
+            font-size: 7vw;
+        }
     }
 </style>

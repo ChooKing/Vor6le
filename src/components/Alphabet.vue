@@ -18,11 +18,7 @@
     const letters = Object.keys(game.alphabet);
 </script>
 
-<style scoped>
-    #alphabetContainer{
-        
-
-    }
+<style scoped>    
     #alphabetContainer button{
         color:white;        
         font-size: 2.5rem;
@@ -40,5 +36,12 @@
     }
     .yellow{
         background-color: rgb(169, 151, 12);
+    }
+    @media only screen and (max-width: 800px){
+        #alphabetContainer button{
+            width: 8vw;
+            margin: 0.25vw;
+            font-size: 6vw;
+        }        
     }
 </style>
