@@ -9,16 +9,20 @@ enum Colors{
 export enum Endings{
     Win, Lose, Playing
 }
+const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
+type Letter = typeof qwerty[number] | ' ';
+const emptyAlphabet = Object.fromEntries(qwerty.map(el=>[el, Colors.Black]));
 export interface ColoredLetter{
-    letter: string;
+    letter: Letter;
     color: Colors;
 }
 type LetterCounts = {[key: string]: number}
+type AlphabetColors = {[key: string]: Colors}
 interface GreenPositions{
-    letter: string;
+    letter: Letter;
     position: number;
 }
-const qwerty = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
 const wordListLength = wordList.length;
 
 export const useGameStore = defineStore({
@@ -28,7 +32,7 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
-        alphabet: [] as ColoredLetter[],
+        alphabet: {} as AlphabetColors,
         answer: [] as string[],
         answerCounts: {} as LetterCounts,
         guesses: [] as ColoredLetter[][],
@@ -37,7 +41,7 @@ export const useGameStore = defineStore({
     actions:{
         setAnswer(){
             let randIndex = Math.round(Math.random()*wordListLength);
-            this.answer = wordList[randIndex].split('');            
+            this.answer = wordList[randIndex].toUpperCase().split('');                
             this.answer.forEach((letter)=>{
                 if(!this.answerCounts[letter]){
                     this.answerCounts[letter]=1;
@@ -46,7 +50,7 @@ export const useGameStore = defineStore({
                     this.answerCounts[letter]++;
                 }
             });
-            this.alphabet=qwerty.split('').map((el)=>({letter: el, color: Colors.Black}));            
+            this.alphabet={...emptyAlphabet};            
             this.guesses=Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));            
         },
         reset(){
@@ -57,7 +61,7 @@ export const useGameStore = defineStore({
         },
         processKey(event: KeyboardEvent){
             if ((event.key.length ==1)&&(this.col<wordLength)&&/[a-zA-Z]/.test(event.key)){                                
-                this.guesses[this.row][this.col].letter = event.key;
+                this.guesses[this.row][this.col].letter = event.key.toUpperCase() as Letter;
                 this.col+=1;
             }            
             else if((event.key=="Backspace")&&(this.row<maxGuesses)){                
@@ -74,10 +78,9 @@ export const useGameStore = defineStore({
                 }
             }          
         },
-        setKeyColor(letter: string, color: Colors){
-            let idx = qwerty.indexOf(letter.toUpperCase());
-            if(this.alphabet[idx].color!=Colors.Green){
-                this.alphabet[idx].color = color;
+        setKeyColor(letter: Letter, color: Colors){                       
+            if(this.alphabet[letter]!=Colors.Green){
+                this.alphabet[letter] = color;
             }            
         },
         getColors(guess: ColoredLetter[]){            
@@ -135,7 +138,7 @@ export const useGameStore = defineStore({
                 }
             });    
         },
-        processGuess(){            
+        processGuess(){
             this.getColors(this.guesses[this.row]);
             if(this.row>=this.maxGuesses-1) this.ending=Endings.Lose;
             
