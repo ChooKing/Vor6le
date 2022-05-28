@@ -10,7 +10,7 @@ enum Colors{
 export enum Statuses{
     Win, Lose, Playing, Invalid
 }
-const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
+export const qwerty = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'] as const;
 export type Letter = typeof qwerty[number] | ' ';
 const emptyAlphabet = Object.fromEntries(qwerty.map(el=>[el, Colors.Black]));
 export interface ColoredLetter{
@@ -18,7 +18,8 @@ export interface ColoredLetter{
     color: Colors;
 }
 type LetterCounts = Map<Letter, number>;
-type AlphabetColors = {[key: string]: Colors}
+//type AlphabetColors = {[key: string]: Colors}
+type AlphabetColors = Map<Letter, Colors>;
 interface GreenPositions{
     letter: Letter;
     position: number;
@@ -33,7 +34,7 @@ export const useGameStore = defineStore({
         wordLength: wordLength,
         row: 0, 
         col: 0,
-        alphabet: {} as AlphabetColors,
+        alphabet: new Map<Letter, Colors>() as AlphabetColors,
         answer: [] as Letter[],
         answerCounts: new Map<Letter, number>() as LetterCounts,
         guesses: [] as ColoredLetter[][],
@@ -42,8 +43,7 @@ export const useGameStore = defineStore({
     actions:{
         setAnswer(){
             let randIndex = Math.round(Math.random()*wordListLength);
-            this.answer = wordList[randIndex].toUpperCase().split('') as Letter[];
-            this.answerCounts = new Map<Letter, number>() as LetterCounts;
+            this.answer = wordList[randIndex].toUpperCase().split('') as Letter[];            
             this.answer.forEach((letter)=>{
                 if(!this.answerCounts.has(letter)){
                     this.answerCounts.set(letter, 1);
@@ -52,10 +52,14 @@ export const useGameStore = defineStore({
                     this.answerCounts.set(letter, this.answerCounts.get(letter)!+1);
                 }
             });
-            this.alphabet={...emptyAlphabet};            
+            qwerty.forEach(letter=>{
+                this.alphabet.set(letter, Colors.Black);
+            });
+            //this.alphabet={...emptyAlphabet};            
             this.guesses=Array.from({length: maxGuesses}, _=>Array.from({length: wordLength}, _=>({letter: " ", color: Colors.Black})));            
         },
         reset(){
+            this.answerCounts = new Map<Letter, number>() as LetterCounts;
             this.setAnswer();
             this.row=0;
             this.col=0;            
@@ -80,8 +84,8 @@ export const useGameStore = defineStore({
             }          
         },
         setKeyColor(letter: Letter, color: Colors){                       
-            if(this.alphabet[letter]!=Colors.Green){
-                this.alphabet[letter] = color;
+            if(this.alphabet.get(letter)!=Colors.Green){
+                this.alphabet.set(letter, color);
             }            
         },
         getColors(guess: ColoredLetter[]){            
@@ -142,8 +146,7 @@ export const useGameStore = defineStore({
         processGuess(){
             const possibleWord = this.guesses[this.row].reduce((acc, el)=>acc+el.letter, "").toLowerCase();            
             if(allWords.includes(possibleWord)){                
-                this.getColors(this.guesses[this.row]);
-                //TODO: Refactor to pass only row number!!!!!!!!!!!!!!
+                this.getColors(this.guesses[this.row]);                
                 if(this.row<maxGuesses){
                     this.row += 1;
                     this.col=0;                    

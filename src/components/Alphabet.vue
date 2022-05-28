@@ -1,21 +1,21 @@
 <template>
     <div id="alphabetContainer">
         <div>
-            <button v-for="item in 10" @click="processButton" :class="game.alphabet[letters[item-1]]">{{letters[item-1]}}</button>
+            <button v-for="item in 10" @click="processButton" :class="game.alphabet.get(qwerty[item-1])">{{qwerty[item-1]}}</button>
         </div>
         <div>
-            <button v-for="item in 9" @click="processButton" :class="game.alphabet[letters[item+9]]">{{letters[item+9]}}</button>            
+            <button v-for="item in 9" @click="processButton" :class="game.alphabet.get(qwerty[item+9])">{{qwerty[item+9]}}</button>            
         </div>
         <div>
             <button @click="game.processEnter" class="black control" >ENTER</button>
-            <button v-for="item in 7" @click="processButton" :class="game.alphabet[letters[item+18]]">{{letters[item+18]}}</button>
+            <button v-for="item in 7" @click="processButton" :class="game.alphabet.get(qwerty[item+18])">{{qwerty[item+18]}}</button>
             <button @click="game.processBackspace" class="black control">&lAarr;</button>            
         </div>        
     </div>
 </template>
 
 <script setup lang="ts">
-    import { Letter, useGameStore } from '../stores/game';
+    import { Letter, useGameStore, qwerty } from '../stores/game';
     const game = useGameStore();
     const letters = Object.keys(game.alphabet);
     function processButton(event:Event){
