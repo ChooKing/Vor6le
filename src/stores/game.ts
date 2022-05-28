@@ -17,7 +17,7 @@ export interface ColoredLetter{
     letter: Letter;
     color: Colors;
 }
-type LetterCounts = {[key: string]: number}
+type LetterCounts = Map<Letter, number>;
 type AlphabetColors = {[key: string]: Colors}
 interface GreenPositions{
     letter: Letter;
@@ -34,21 +34,22 @@ export const useGameStore = defineStore({
         row: 0, 
         col: 0,
         alphabet: {} as AlphabetColors,
-        answer: [] as string[],
-        answerCounts: {} as LetterCounts,
+        answer: [] as Letter[],
+        answerCounts: new Map<Letter, number>() as LetterCounts,
         guesses: [] as ColoredLetter[][],
         status: Statuses.Playing
     }),
     actions:{
         setAnswer(){
             let randIndex = Math.round(Math.random()*wordListLength);
-            this.answer = wordList[randIndex].toUpperCase().split('');                
+            this.answer = wordList[randIndex].toUpperCase().split('') as Letter[];
+            this.answerCounts = new Map<Letter, number>() as LetterCounts;
             this.answer.forEach((letter)=>{
-                if(!this.answerCounts[letter]){
-                    this.answerCounts[letter]=1;
+                if(!this.answerCounts.has(letter)){
+                    this.answerCounts.set(letter, 1);
                 }
                 else{
-                    this.answerCounts[letter]++;
+                    this.answerCounts.set(letter, this.answerCounts.get(letter)!+1);
                 }
             });
             this.alphabet={...emptyAlphabet};            
@@ -84,32 +85,31 @@ export const useGameStore = defineStore({
             }            
         },
         getColors(guess: ColoredLetter[]){            
-            const greenCounts: LetterCounts={};
-            const guessCounts: LetterCounts={};
-            const yellowCounts: LetterCounts={};
-            this.status=Statuses.Win;
-            
+            const greenCounts=new Map<Letter, number>();
+            const guessCounts=new Map<Letter, number>();
+            const yellowCounts=new Map<Letter, number>();
+            this.status=Statuses.Win;            
             guess.forEach((item)=>{
-                if(!guessCounts[item.letter]){
-                    guessCounts[item.letter]=1;
+                if(!guessCounts.has(item.letter)){
+                    guessCounts.set(item.letter, 1);
                 }
                 else{
-                    guessCounts[item.letter]++;
+                    guessCounts.set(item.letter, guessCounts.get(item.letter)!+1);
                 }
             });            
             guess.forEach((el, idx)=>{
                 if(el.letter==this.answer[idx]){
-                    if(el.letter in greenCounts){
-                        greenCounts[el.letter]++;
+                    if(greenCounts.has(el.letter)){
+                        greenCounts.set(el.letter, greenCounts.get(el.letter)!+1);
                     }
                     else{
-                        greenCounts[el.letter]=1;                        
+                        greenCounts.set(el.letter, 1);                        
                     } 
                     this.setKeyColor(el.letter, Colors.Green);
                 }
                 else{
                     this.status=Statuses.Playing;
-                    if(!greenCounts[el.letter]) greenCounts[el.letter]=0;
+                    if(!greenCounts.has(el.letter)) greenCounts.set(el.letter, 0);
                 }
             });            
             guess.forEach((el, idx)=>{        
@@ -118,10 +118,10 @@ export const useGameStore = defineStore({
                         el.color=Colors.Green;                                                
                     }
                     else{
-                        if(!yellowCounts[el.letter]){
-                            yellowCounts[el.letter] = 0;
+                        if(!yellowCounts.has(el.letter)){
+                            yellowCounts.set(el.letter,0);
                         }
-                        if(yellowCounts[el.letter]+greenCounts[el.letter]<this.answerCounts[el.letter]){
+                        if(yellowCounts.get(el.letter)!+greenCounts.get(el.letter)!<this.answerCounts.get(el.letter)!){
                             this.setKeyColor(el.letter, Colors.Yellow);
                             el.color=Colors.Yellow;
                         } 
@@ -129,24 +129,26 @@ export const useGameStore = defineStore({
                             el.color=Colors.Grey;
                             this.setKeyColor(el.letter, Colors.Grey);
                         }
-                        yellowCounts[el.letter]++;
+                        yellowCounts.set(el.letter, yellowCounts.get(el.letter)!+1);
                     }            
                 }
                 else{
                     el.color=Colors.Grey;
                     this.setKeyColor(el.letter, Colors.Grey);
                 }
-            });    
+            });   
+            
         },
         processGuess(){
             const possibleWord = this.guesses[this.row].reduce((acc, el)=>acc+el.letter, "").toLowerCase();            
             if(allWords.includes(possibleWord)){                
                 this.getColors(this.guesses[this.row]);
+                //TODO: Refactor to pass only row number!!!!!!!!!!!!!!
                 if(this.row<maxGuesses){
                     this.row += 1;
                     this.col=0;                    
                 }
-                if(this.row>=this.maxGuesses) this.status=Statuses.Lose;                
+                if((this.row>=this.maxGuesses)&&(this.status!=Statuses.Win)) this.status=Statuses.Lose;                
             }
             else{
                 this.status = Statuses.Invalid;

@@ -49,12 +49,24 @@
     }
     @media only screen and (max-width: 800px){
         #alphabetContainer button{
-            width: 8vw;
+            width: 7vw;
             margin: 0.25vw;
-            font-size: 6vw;
+            font-size: 5vw;
+            padding: 3px;
         }  
         .control{            
-            font-size: 6vw;
+            font-size: 5vw;
+        }      
+    }
+    @media only screen and (max-width: 400px){
+        #alphabetContainer button{
+            width: 7vw;
+            margin: 0.15vw;
+            font-size: 5vw;
+            padding: 2px;
+        }  
+        .control{            
+            font-size: 5vw;
         }      
     }
 </style>
